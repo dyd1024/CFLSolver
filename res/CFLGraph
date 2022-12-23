@@ -1,5 +1,8 @@
-A ( B
-B ( B
-B ) C
-C ( C
-C ) F
+a ( b
+b ( a
+b [ c
+c ] d
+d ] c
+d ) e
+e [ b
+e ) c

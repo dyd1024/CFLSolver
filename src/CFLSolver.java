@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CFLSolver {
-    private Queue<Tuple<String, Tuple<String, String>>> workList = new LinkedList<Tuple<String, Tuple<String, String>>>();
+    private Queue<Tuple<String, Tuple<String, String>>> workList = new LinkedList<>();
     private CFLGraph cflGraph;
     private CFLGrammar cflGrammar;
 
@@ -45,9 +45,13 @@ public class CFLSolver {
                 if (binaryRule.y.substring(0,1).equals(weight)){
                     cflGraph.getAdj_list().get(edge.y.y).forEach(old_edge -> {
                         if (old_edge.x.equals(binaryRule.y.substring(1,2))){
-                            Tuple new_edge = new Tuple(edge.x, new Tuple<>(binaryRule.x, old_edge.y));
-                            workList.add(new_edge);
-                            new_edge_set.add(new_edge);
+                            Tuple edge_tar = new Tuple<>(binaryRule.x, old_edge.y);
+                            Tuple new_edge = new Tuple(edge.x, edge_tar);
+                            Set<Tuple<String, String>> edge_set = cflGraph.getAdj_list().get(edge.x);
+                            if (!edge_set.contains(edge_tar)){
+                                workList.add(new_edge);
+                                new_edge_set.add(new_edge);
+                            }
                         }
                     });
                 }
@@ -56,9 +60,13 @@ public class CFLSolver {
                     CFLGraph re_graph = cflGraph.reverse();
                     re_graph.getAdj_list().get(edge.x).forEach(old_edge -> {
                         if (old_edge.x.equals(binaryRule.y.substring(0,1))){
-                            Tuple new_edge = new Tuple<>(old_edge.y, new Tuple<>(binaryRule.x, edge.y.y));
-                            workList.add(new_edge);
-                            new_edge_set.add(new_edge);
+                            Tuple edge_tar = new Tuple<>(binaryRule.x, edge.y.y);
+                            Tuple new_edge = new Tuple<>(old_edge.y, edge_tar);
+                            Set<Tuple<String, String>> edge_set = cflGraph.getAdj_list().get(old_edge.y);
+                            if (!edge_set.contains(edge_tar)){
+                                workList.add(new_edge);
+                                new_edge_set.add(new_edge);
+                            }
                         }
                     });
                 }

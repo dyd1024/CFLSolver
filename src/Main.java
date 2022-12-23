@@ -4,20 +4,18 @@ import org.util.Tuple;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
         CFLGraph cflGraph = initGraph("./res/CFLGraph");
-//        cflGraph.printGraph();
+        cflGraph.printGraph();
         CFLGrammar cflGrammar = initGrammar("./res/CFLGrammar");
-//        cflGrammar.print_grammar();
+        cflGrammar.print_grammar();
         CFLSolver solver = new CFLSolver();
         solver.reachability(cflGrammar, cflGraph);
-        Boolean is_reach = solver.query("B", "A", "F");
+        Boolean is_reach = solver.query("a", "A", "e");
         if (is_reach){
             System.out.println("可达！");
         }else {
